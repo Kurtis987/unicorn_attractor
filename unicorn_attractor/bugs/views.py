@@ -6,6 +6,9 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.template.context_processors import csrf
 from .forms import BugForm, PostForm
+from django.forms import formset_factory
+from polls.forms import PollSubjectForm, PollForm
+from polls.models import PollSubject
 
 def forum(request):
    return render(request, 'forum/forum.html', {'subjects': Subject.objects.all()})
@@ -17,42 +20,77 @@ def bugs(request, subject_id):
 @login_required
 def new_bug(request, subject_id):
     subject = get_object_or_404(Subject, pk=subject_id)
+    poll_subject_formset_class = formset_factory(PollSubjectForm, extra=1)
+
     if request.method == "POST":
         bug_form = BugForm(request.POST)
         post_form = PostForm(request.POST)
-        if bug_form.is_valid() and post_form.is_valid():
-            bug = bug_form.save(False)
-            bug.subject = subject
-            bug.user = request.user
-            bug.save()
- 
-            post = post_form.save(False)
-            post.user = request.user
-            post.bug = bug
-            post.save()
- 
+        poll_form = PollForm(request.POST)
+        poll_subject_formset = poll_subject_formset_class(request.POST)
+
+        is_a_poll = request.POST.get('is_a_poll')
+        bug_valid = bug_form.is_valid() and post_form.is_valid()
+        poll_valid = poll_form.is_valid() and poll_subject_formset.is_valid()
+
+        if (bug_valid and not is_a_poll):
+            bug = save_bug(bug_form, post_form, subject, request.user)
             messages.success(request, "You have created a new bug!")
- 
             return redirect(reverse('bug', args=[bug.pk]))
+
+
+        if (bug_valid and is_a_poll and poll_valid):
+            bug = save_bug(bug_form, post_form, subject, request.user)
+            save_poll(poll_form, poll_subject_formset, bug)
+            messages.success(
+                request, "You have created a new bug with a poll!")
+            return redirect(reverse('bug', args=[bug.pk]))
+
     else:
         bug_form = BugForm()
         post_form = PostForm()
- 
+        poll_form = PollForm()
+        poll_subject_formset = poll_subject_formset_class()
+
     args = {
-        'bug_form' : bug_form,
-        'post_form' : post_form,
-        'subject' : subject,
+        'bug_form': bug_form,
+        'post_form': post_form,
+        'subject': subject,
+        'poll_form': poll_form,
+        'poll_subject_formset': poll_subject_formset
     }
+
     args.update(csrf(request))
- 
+
     return render(request, 'forum/bug_form.html', args)
-
-
 def bug(request, bug_id):
     bug_ = get_object_or_404(Bug, pk=bug_id)
     args = {'bug': bug_}
     args.update(csrf(request))
     return render(request, 'forum/bug.html', args)
+
+def save_bug(bug_form, post_form, subject, user):
+    bug = bug_form.save(commit=False)
+    bug.subject = subject
+    bug.user = user
+    bug.save()
+
+    post = post_form.save(commit=False)
+    post.user = user
+    post.bug = bug
+    post.save()
+    return bug
+
+
+def save_poll(poll_form, poll_subject_formset, bug):
+    poll = poll_form.save(commit=False)
+    poll.bug = bug
+    poll.save()
+
+    for subject_form in poll_subject_formset:
+        subject = subject_form.save(commit=False)
+        subject.poll = poll
+        subject.save()
+
 
 @login_required
 def new_post(request, bug_id):
@@ -110,9 +148,27 @@ def edit_post(request, bug_id, post_id):
 @login_required
 def delete_post(request, bug_id, post_id):
    post = get_object_or_404(Post, pk=post_id)
-   thread_id = post.bug.id
+   bug_id = post.bug.id
    post.delete()
  
    messages.success(request, "Your post was deleted!")
+ 
+   return redirect(reverse('bug', args={bug_id}))
+
+@login_required
+def bug_vote(request, bug_id, subject_id):
+   bug = Bug.objects.get(id=bug_id)
+ 
+   subject = bug.poll.votes.filter(user=request.user)
+ 
+   if subject:
+       messages.error(request, "You already voted on this! ... You’re not trying to cheat are you?")
+       return redirect(reverse('bug', args={bug_id}))
+ 
+   subject = PollSubject.objects.get(id=subject_id)
+ 
+   subject.votes.create(poll=subject.poll, user=request.user)
+ 
+   messages.success(request, "We've registered your vote!")
  
    return redirect(reverse('bug', args={bug_id}))

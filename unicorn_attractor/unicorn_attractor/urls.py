@@ -33,4 +33,5 @@ urlpatterns = [
     url(r'^post/new/(?P<bug_id>\d+)/$', forum_views.new_post, name='new_post'),
     url(r'^post/edit/(?P<bug_id>\d+)/(?P<post_id>\d+)/$',forum_views.edit_post, name='edit_post'),
     url(r'^post/delete/(?P<bug_id>\d+)/(?P<post_id>\d+)/$', forum_views.delete_post, name='delete_post'),
+    url(r'^bug/vote/(?P<bug_id>\d+)/(?P<subject_id>\d+)/$', forum_views.bug_vote, name='cast_vote'),
 ]
