@@ -2,12 +2,15 @@
 <html>
 	<head>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
-		<link rel="stylesheet" href="../static/css/style.css">
+		{% load static %}
+		<link rel="stylesheet" href="{% static "css/style.css" %}">
+		<link rel="stylesheet" href="{% static "css/fontawesome-free-5.0.13/web-fonts-with-css/css/fontawesome.css" %}">
   		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+		{% block head_js %}{% endblock head_js %}
 	</head>
 	<body>
-		<img id="logo" src="../static/img/unicorn.jpg" alt="unicorn" width="131px" height="225px">
+		<img id="logo" src="{%  static "img/unicorn.jpg" %}" alt="unicorn" width="131px" height="225px">
 		<h1 class="heading">Unicorn Attractor</h1>
 		<h2 class="heading bottom-heading">Issue Tracker</h2>
 		<nav class="navbar bg-dark">
@@ -16,7 +19,7 @@
 		      <a class="nav-link" href="#">Home</a>
 		    </li>
 		    <li class="nav-item">
-		      <a class="nav-link" href="#">Bugs</a>
+		      <a class="nav-link" href="/forum/">Bugs</a>
 		    </li>
 		    <li class="nav-item">
 		      <a class="nav-link" href="#">Feature Request</a>

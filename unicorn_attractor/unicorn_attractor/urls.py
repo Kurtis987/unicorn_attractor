@@ -17,6 +17,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from accounts import views as accounts_views
 from hello import views as hello_views
+from bugs import views as forum_views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -25,4 +26,11 @@ urlpatterns = [
     url(r'^profile/$', accounts_views.profile, name='profile'),
     url(r'^login/$', accounts_views.login, name='login'),
     url(r'^logout/$', accounts_views.logout, name='logout'),
+    url(r'^forum/$', forum_views.forum),
+    url(r'^bugs/(?P<subject_id>\d+)/$', forum_views.bugs, name='bugs'),
+    url(r'^new_bug/(?P<subject_id>\d+)/$',  forum_views.new_bug, name='new_bug'),
+    url(r'^bug/(?P<bug_id>\d+)/$', forum_views.bug, name='bug'),
+    url(r'^post/new/(?P<bug_id>\d+)/$', forum_views.new_post, name='new_post'),
+    url(r'^post/edit/(?P<bug_id>\d+)/(?P<post_id>\d+)/$',forum_views.edit_post, name='edit_post'),
+    url(r'^post/delete/(?P<bug_id>\d+)/(?P<post_id>\d+)/$', forum_views.delete_post, name='delete_post'),
 ]

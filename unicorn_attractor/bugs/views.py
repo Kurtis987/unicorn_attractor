@@ -1,0 +1,118 @@
+from django.shortcuts import render, get_object_or_404
+from .models import Subject, Bug, Post
+from django.shortcuts import redirect
+from django.contrib import messages, auth
+from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
+from django.template.context_processors import csrf
+from .forms import BugForm, PostForm
+
+def forum(request):
+   return render(request, 'forum/forum.html', {'subjects': Subject.objects.all()})
+
+def bugs(request, subject_id):
+    subject = get_object_or_404(Subject, pk=subject_id)
+    return render(request, 'forum/bugs.html', {'subject': subject})
+ 
+@login_required
+def new_bug(request, subject_id):
+    subject = get_object_or_404(Subject, pk=subject_id)
+    if request.method == "POST":
+        bug_form = BugForm(request.POST)
+        post_form = PostForm(request.POST)
+        if bug_form.is_valid() and post_form.is_valid():
+            bug = bug_form.save(False)
+            bug.subject = subject
+            bug.user = request.user
+            bug.save()
+ 
+            post = post_form.save(False)
+            post.user = request.user
+            post.bug = bug
+            post.save()
+ 
+            messages.success(request, "You have created a new bug!")
+ 
+            return redirect(reverse('bug', args=[bug.pk]))
+    else:
+        bug_form = BugForm()
+        post_form = PostForm()
+ 
+    args = {
+        'bug_form' : bug_form,
+        'post_form' : post_form,
+        'subject' : subject,
+    }
+    args.update(csrf(request))
+ 
+    return render(request, 'forum/bug_form.html', args)
+
+
+def bug(request, bug_id):
+    bug_ = get_object_or_404(Bug, pk=bug_id)
+    args = {'bug': bug_}
+    args.update(csrf(request))
+    return render(request, 'forum/bug.html', args)
+
+@login_required
+def new_post(request, bug_id):
+    bug = get_object_or_404(Bug, pk=bug_id)
+ 
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(False)
+            post.bug = bug
+            post.user = request.user
+            post.save()
+ 
+            messages.success(request, "Your post has been added to the bug!")
+ 
+            return redirect(reverse('bug', args={bug.pk}))
+    else:
+        form = PostForm()
+ 
+    args = {
+        'form' : form,
+        'form_action': reverse('new_post', args={bug.id}),
+        'button_text': 'Update Post'
+    }
+    args.update(csrf(request))
+ 
+    return render(request, 'forum/post_form.html', args)
+
+@login_required
+def edit_post(request, bug_id, post_id):
+   bug = get_object_or_404(Bug, pk=bug_id)
+   post = get_object_or_404(Post, pk=post_id)
+ 
+   if request.method == "POST":
+       form = PostForm(request.POST, instance=post)
+       if form.is_valid():
+           form.save()
+           messages.success(request, "You have updated your bug!")
+ 
+           return redirect(reverse('bug', args={bug.pk}))
+   else:
+       form = PostForm(instance=post)
+ 
+ 
+   args = {
+       'form' : form,
+       'form_action': reverse('edit_post',  kwargs={"bug_id" : bug.id, "post_id": post.id}),
+       'button_text': 'Update Post'
+   }
+   args.update(csrf(request))
+ 
+   return render(request, 'forum/post_form.html', args)
+
+
+@login_required
+def delete_post(request, bug_id, post_id):
+   post = get_object_or_404(Post, pk=post_id)
+   thread_id = post.bug.id
+   post.delete()
+ 
+   messages.success(request, "Your post was deleted!")
+ 
+   return redirect(reverse('bug', args={bug_id}))
