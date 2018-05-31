@@ -3,8 +3,7 @@ from .models import Bug, Post
  
  
 class BugForm(forms.ModelForm):
-    name = forms.CharField(label="Bug name")
-    #is_a_poll = forms.BooleanField(label="Include a poll?", required=False)
+    name = forms.CharField(label="Bug name") 
     is_a_poll = forms.BooleanField(label=('Include a poll?'),
     widget=forms.HiddenInput(), required=False, initial=True)
     #is_a_poll = True

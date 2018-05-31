@@ -17,9 +17,17 @@ class Bug(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='bugs')
     subject = models.ForeignKey(Subject, related_name='bugs')
     created_at = models.DateTimeField(default=timezone.now)
+    bug_votes = models.IntegerField(default=0)
+
 
 class Post(models.Model):
     bug = models.ForeignKey(Bug, related_name='posts')
     comment = HTMLField(blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='posts')
     created_at = models.DateTimeField(default=timezone.now)
+
+class Vote(models.Model):
+    bug = models.ForeignKey(Bug, related_name='votes')
+    #poll = models.ForeignKey(Poll, related_name="votes")
+    #subject = models.ForeignKey(Subject, related_name='votes')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='votes')

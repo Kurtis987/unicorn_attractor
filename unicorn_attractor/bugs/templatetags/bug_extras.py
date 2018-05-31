@@ -24,25 +24,25 @@ def last_posted_user_name(bug):
 
 @register.simple_tag
 def user_vote_button(bug, subject, user):
-   vote = bug.poll.votes.filter(user_id=user.id).first()
+    vote = bug.votes.filter(user_id=user.id).first()
  
-   if not vote:
-       if user.is_authenticated():
-           link = """
-           <div class="col-md-3 btn-vote"> 
-           <a href="%s" class="btn btn-default btn-sm">
-             Add my vote!
-           </a>
-           </div>""" % reverse('cast_vote', kwargs={'bug_id' : bug.id, 'subject_id':subject.id})
+    if not vote:
+        if user.is_authenticated():
+            link = """
+            <div class="col-md-3 btn-vote"> 
+            <a href="%s" class="btn btn-default btn-sm">
+              Add my vote!
+            </a>
+            </div>""" % reverse('cast_vote', kwargs={'bug_id' : bug.id, 'subject_id':bug.subject_id})
  
-           return link
+            return link
  
-   return ""
+    return ""
 
 @register.filter
 def vote_count(subject):
    count = subject.votes.count()
    if count == 0:
        return 0
-   total_votes = subject.poll.votes.count()
+   total_votes = subject.votes.count()
    return total_votes
