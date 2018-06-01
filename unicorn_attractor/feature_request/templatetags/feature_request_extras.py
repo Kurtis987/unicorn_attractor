@@ -24,7 +24,7 @@ def last_posted_user_name(feature_request):
 
 @register.simple_tag
 def user_vote_button(feature_request, subject, user):
-    vote = feature_request.votes.filter(user_id=user.id).first()
+    vote = feature_request.feature_request_votes.filter(user_id=user.id).first()
  
     if not vote:
         if user.is_authenticated():
@@ -41,8 +41,8 @@ def user_vote_button(feature_request, subject, user):
 
 @register.filter
 def vote_count(subject):
-   count = subject.votes.count()
+   count = subject.feature_request_votes.count()
    if count == 0:
        return 0
-   total_votes = subject.votes.count()
+   total_votes = subject.feature_request_votes.count()
    return total_votes

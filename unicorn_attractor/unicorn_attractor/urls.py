@@ -18,6 +18,7 @@ from django.contrib import admin
 from accounts import views as accounts_views
 from hello import views as hello_views
 from bugs import views as forum_views
+from feature_request import views as fr_views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -34,4 +35,12 @@ urlpatterns = [
     url(r'^post/edit/(?P<bug_id>\d+)/(?P<post_id>\d+)/$',forum_views.edit_post, name='edit_post'),
     url(r'^post/delete/(?P<bug_id>\d+)/(?P<post_id>\d+)/$', forum_views.delete_post, name='delete_post'),
     url(r'^bug/vote/(?P<bug_id>\d+)/(?P<subject_id>\d+)/$', forum_views.bug_vote, name='cast_vote'),
+    url(r'^feature_request_forum/$', fr_views.forum),
+    url(r'^feature_requests/(?P<subject_id>\d+)/$', fr_views.feature_requests, name='feature_requests'),
+    url(r'^new_feature_request/(?P<subject_id>\d+)/$',  fr_views.new_feature_request, name='new_feature_request'),
+    url(r'^feature_request/(?P<feature_request_id>\d+)/$', fr_views.feature_request, name='feature_request'),
+    url(r'^post/new/(?P<feature_requests_id>\d+)/$', fr_views.new_post, name='new_feature_request_post'),
+    url(r'^post/edit/(?P<feature_requests_id>\d+)/(?P<post_id>\d+)/$',fr_views.edit_post, name='edit_feature_request_post'),
+    url(r'^post/delete/(?P<feature_requests_id>\d+)/(?P<post_id>\d+)/$', fr_views.delete_post, name='delete_feature_request_post'),
+    url(r'^feature_request/vote/(?P<feature_request_id>\d+)/(?P<subject_id>\d+)/$', fr_views.feature_request_vote, name='cast_feature_request_vote'),
 ]

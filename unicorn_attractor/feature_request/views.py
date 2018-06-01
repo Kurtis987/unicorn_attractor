@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Subject, FeatureRequest, Post, Vote
+from .models import Subject, FeatureRequest, FRPost, FRVote
 from django.shortcuts import redirect
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
@@ -32,9 +32,7 @@ def new_feature_request(request, subject_id):
 
     else:
         feature_request_form = FeatureRequestForm()
-        post_form = PostForm()
-        #poll_form = PollForm()
-        #poll_subject_formset = poll_subject_formset_class()
+        post_form = PostForm() 
 
     args = {
         'feature_request_form': feature_request_form,
@@ -45,6 +43,7 @@ def new_feature_request(request, subject_id):
     args.update(csrf(request))
 
     return render(request, 'forum/feature_request_form.html', args)
+
 def feature_request(request, feature_request_id):
     feature_request_ = get_object_or_404(FeatureRequest, pk=feature_request_id)
     args = {'feature_request': feature_request_}
@@ -94,7 +93,7 @@ def new_post(request, feature_request_id):
 @login_required
 def edit_post(request, feature_request_id, post_id):
    feature_request = get_object_or_404(FeatureRequest, pk=feature_request_id)
-   post = get_object_or_404(Post, pk=post_id)
+   post = get_object_or_404(FRPost, pk=post_id)
  
    if request.method == "POST":
        form = PostForm(request.POST, instance=post)
@@ -119,7 +118,7 @@ def edit_post(request, feature_request_id, post_id):
 
 @login_required
 def delete_post(request, feature_request_id, post_id):
-   post = get_object_or_404(Post, pk=post_id)
+   post = get_object_or_404(FRPost, pk=post_id)
    feature_request = post.feature_request.id
    post.delete()
  
@@ -132,12 +131,12 @@ def feature_request_vote(request, feature_request_id, subject_id):
     feature_request = FeatureRequest.objects.get(id=feature_request_id)
     
     
-    vote = feature_request.votes.filter(user=request.user) 
+    vote = feature_request.feature_request_votes.filter(user=request.user) 
     if vote:
       messages.error(request, "You already voted on this! ... You’re not trying to cheat are you?")
       return redirect(reverse('feature_request', args={feature_request_id}))
     else:
-      feature_request.feature_request_votes += 1
+      feature_request.feature_votes += 1
       feature_request.save()
       Vote.objects.create(feature_request=feature_request, user=request.user)  
       return redirect(reverse('feature_request', args={feature_request_id}))

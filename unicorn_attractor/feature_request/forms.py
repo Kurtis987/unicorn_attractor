@@ -1,5 +1,5 @@
 from django import forms
-from .models import FeatureReqeust, Post
+from .models import FeatureRequest, FRPost
  
  
 class FeatureRequestForm(forms.ModelForm):
@@ -14,5 +14,5 @@ class FeatureRequestForm(forms.ModelForm):
  
 class PostForm(forms.ModelForm):
    class Meta:
-       model = Post
+       model = FRPost
        fields = ['comment']

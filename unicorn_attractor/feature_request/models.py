@@ -21,16 +21,16 @@ class FeatureRequest(models.Model):
     status_choices = ['todo', 'doing', 'done']
     status = models.IntegerField(default=0)
 
-class Post(models.Model):
-    featureRequest = models.ForeignKey(FeatureRequest, related_name='posts')
+class FRPost(models.Model):
+    featureRequest = models.ForeignKey(FeatureRequest, related_name='feature_request_posts')
     comment = HTMLField(blank=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='posts')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='feature_request_posts')
     created_at = models.DateTimeField(default=timezone.now)
 
-class Vote(models.Model):
-    featureRequest = models.ForeignKey(FeatureRequest, related_name='votes')
+class FRVote(models.Model):
+    featureRequest = models.ForeignKey(FeatureRequest, related_name='feature_request_votes')
     #poll = models.ForeignKey(Poll, related_name="votes")
     #subject = models.ForeignKey(Subject, related_name='votes')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='votes')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='feature_request_votes')
 
 # Create your models here.
