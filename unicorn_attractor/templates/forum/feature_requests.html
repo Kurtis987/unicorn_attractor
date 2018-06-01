@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load feature_request_extras %}
+{% block content %}
+ <div class="row header">
+   <div class="jumbotron"><h1>{{ subject.name }}</h1></div>
+ </div>
+ <div class="col-md-12">
+   {% if user.is_authenticated %}
+     <p>
+       <a href="{% url 'new_feature_request' subject.id %}" class="btn btn-primary">New Feature Request</a>
+     </p>
+   {% endif %}
+   {% for feature_request in subject.feature_requests.all %}
+     {% include "forum/feature_request_item.html" %}
+   {% endfor %}
+ </div>
+{% endblock %}

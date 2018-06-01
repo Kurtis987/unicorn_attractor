@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load feature_request_extras %}
+{% load staticfiles %}
+{% block content %}
+ 
+ <div class="row header">
+ 
+   <div class="container">
+     <h2>{{ feature_request.name }}</h2>
+     <div class="col-md-12">
+         <table class="table">
+             <tbody>
+             <tr>
+                 <th>
+                   CREATED
+                 </th>
+                 <th>OWNER</th>
+                 <th>LAST POST</th>
+             </tr>
+             <tr>
+                 <td>
+                   <time datetime="{{ feature_request.created_at }}">
+                    {{ feature_request.created_at|started_time }}
+                   </time>
+                 </td>
+                 <td>{{ feature_request.user.username }}</td>
+                 <td>{% last_posted_user_name feature_request %}</td>
+             </tr>
+           </tbody>
+         </table>
+     </div> 
+     <div class="container">
+         <div class="col-md-6">
+             <h2>Upvote</h2> 
+ 
+                 <div class="col-md-10"> 
+                     <span class="pull-right">Votes: {{ feature_request.feature_request_votes }}</span>
+                 </div>
+
+                 {% autoescape off %}
+                 {% user_vote_button feature_request feature_request user %}
+                 {% endautoescape %}
+
+              </div> 
+         </div>
+     </div> 
+
+
+
+     {% if user.is_authenticated %}
+       <p>
+         <a href="{% url 'new_post' feature_request.id %}" class="btn btn-primary">New post</a>
+       </p>
+     {% endif %}
+   </div>
+ </div>
+ <div class="container">
+   {% for post in feature_request.posts.all %}
+     {% include "forum/post.html" %}
+   {% endfor %}
+ </div>
+{% endblock %}
