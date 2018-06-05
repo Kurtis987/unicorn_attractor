@@ -8,7 +8,7 @@ register = template.Library()
 def get_total_subject_posts(subject):
    total_posts = 0
    for feature_request in subject.feature_requests.all():
-       total_posts += feature_request.posts.count()
+       total_posts += feature_request.feature_request_posts.count()
    return total_posts
 
 @register.filter
@@ -18,7 +18,7 @@ def started_time(created_at):
  
 @register.simple_tag
 def last_posted_user_name(feature_request):
-    last_post = feature_request.posts.all().order_by('created_at').last()
+    last_post = feature_request.feature_request_posts.all().order_by('created_at').last()
     return last_post.user.username
 
 

@@ -29,8 +29,6 @@ class FRPost(models.Model):
 
 class FRVote(models.Model):
     featureRequest = models.ForeignKey(FeatureRequest, related_name='feature_request_votes')
-    #poll = models.ForeignKey(Poll, related_name="votes")
-    #subject = models.ForeignKey(Subject, related_name='votes')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='feature_request_votes')
 
 # Create your models here.

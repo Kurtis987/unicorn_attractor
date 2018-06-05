@@ -49,14 +49,14 @@
 
      {% if user.is_authenticated %}
        <p>
-         <a href="{% url 'new_post' feature_request.id %}" class="btn btn-primary">New post</a>
+         <a href="{% url 'new_feature_request_post' feature_request.id %}" class="btn btn-primary">New post</a>
        </p>
      {% endif %}
    </div>
  </div>
  <div class="container">
-   {% for post in feature_request.posts.all %}
-     {% include "forum/post.html" %}
+   {% for post in feature_request.feature_request_posts.all %}
+     {% include "forum/feature_request_post.html" %}
    {% endfor %}
  </div>
 {% endblock %}

@@ -17,18 +17,17 @@ def feature_requests(request, subject_id):
  
 @login_required
 def new_feature_request(request, subject_id):
-    subject = get_object_or_404(Subject, pk=subject_id)
-    #poll_subject_formset_class = formset_factory(PollSubjectForm, extra=1)
+    subject = get_object_or_404(Subject, pk=subject_id) 
 
     if request.method == "POST":
         feature_request_form = FeatureRequestForm(request.POST)
         post_form = PostForm(request.POST) 
  
         feature_request_valid = feature_request_form.is_valid() and post_form.is_valid() 
-
-        feature_request = save_feature_request(feature_request_form, post_form, subject, request.user)
-        messages.success(request, "You have created a new feature request!")
-        return redirect(reverse('feature_request', args=[feature_request.pk]))
+        if feature_request_valid: 
+        	feature_request = save_feature_request(feature_request_form, post_form, subject, request.user)
+        	messages.success(request, "You have created a new feature request!")
+        	return redirect(reverse('feature_request', args=[feature_request.pk]))
 
     else:
         feature_request_form = FeatureRequestForm()
@@ -59,7 +58,7 @@ def save_feature_request(feature_request_form, post_form, subject, user):
     post = post_form.save(commit=False)
     post.user = user
     post.feature_request = feature_request
-    post.save()
+    post.save() 
     return feature_request
 
 
@@ -83,7 +82,7 @@ def new_post(request, feature_request_id):
  
     args = {
         'form' : form,
-        'form_action': reverse('new_post', args={feature_request.id}),
+        'form_action': reverse('new_feature_request_post', args={feature_request.id}),
         'button_text': 'Update Post'
     }
     args.update(csrf(request))

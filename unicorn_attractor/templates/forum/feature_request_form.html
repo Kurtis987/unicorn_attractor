@@ -15,7 +15,7 @@
 {% block content %}
    <section>
        <div class="col-md-9">
-           <form method="post" action="{% url 'new_bug' subject.id %}">
+           <form method="post" action="{% url 'new_feature_request' subject.id %}">
                {% csrf_token %}
                {{ feature_request_form | as_bootstrap }}
                <hr>
