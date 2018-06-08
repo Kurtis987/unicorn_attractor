@@ -22,7 +22,7 @@ class FeatureRequest(models.Model):
     status = models.IntegerField(default=0)
 
 class FRPost(models.Model):
-    featureRequest = models.ForeignKey(FeatureRequest, related_name='feature_request_posts')
+    featureRequest = models.ForeignKey(FeatureRequest, related_name='feature_request_posts', null=True, blank=True)
     comment = HTMLField(blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='feature_request_posts')
     created_at = models.DateTimeField(default=timezone.now)
