@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'tinymce',
     'emoticons', 
-    'bugs', 
+    'bugs',
+    'features'
 ]
 
 Internal_IPS = ('127.0.0.1',)
