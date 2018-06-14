@@ -6,7 +6,7 @@
        <section class="subject">
            <h2><a href="{% url "features" subject.id %}">{{ subject.name }}</a></h2>
            <p>
-               <a href="{% url "feautures" subject.id %}">
+               <a href="{% url "features" subject.id %}">
                    {% autoescape off %}{{ subject.description }}{% endautoescape %}
                </a>
            </p>

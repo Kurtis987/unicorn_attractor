@@ -33,7 +33,7 @@ def user_vote_button(feature, subject, user):
             <a href="%s" class="btn btn-default btn-sm">
               Add my vote!
             </a>
-            </div>""" % reverse('cast_vote', kwargs={'feature_id' : feature.id, 'subject_id':feature.subject_id})
+            </div>""" % reverse('cast_feature_vote', kwargs={'feature_id' : feature.id, 'subject_id':feature.subject_id})
  
             return link
  

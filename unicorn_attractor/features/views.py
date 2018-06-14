@@ -128,7 +128,7 @@ def delete_post(request, feature_id, post_id):
 
 @login_required
 def feature_vote(request, feature_id, subject_id):
-    feature = feature.objects.get(id=feature_id)
+    feature = Feature.objects.get(id=feature_id)
     
     
     vote = feature.feature_votes.filter(user=request.user) 
