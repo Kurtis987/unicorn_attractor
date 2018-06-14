@@ -8,12 +8,12 @@ from django.template.context_processors import csrf
 from .forms import FeatureForm, PostForm
 from django.forms import formset_factory 
 
-def forum(request):
-   return render(request, 'forum/forum.html', {'subjects': Subject.objects.all()})
+def feature_forum(request):
+	return render(request, 'forum/feature_forum.html', {'subjects': Subject.objects.all()})
 
 def features(request, subject_id):
-    subject = get_object_or_404(Subject, pk=subject_id)
-    return render(request, 'forum/features.html', {'subject': subject})
+	subject = get_object_or_404(Subject, pk=subject_id)
+	return render(request, 'forum/features.html', {'subject': subject})
  
 @login_required
 def new_feature(request, subject_id):
@@ -131,12 +131,12 @@ def feature_vote(request, feature_id, subject_id):
     feature = feature.objects.get(id=feature_id)
     
     
-    vote = feature.votes.filter(user=request.user) 
+    vote = feature.feature_votes.filter(user=request.user) 
     if vote:
       messages.error(request, "You already voted on this! ... You’re not trying to cheat are you?")
       return redirect(reverse('feature', args={feature_id}))
     else:
-      feature.feature_votes += 1
+      feature.feature_votes_count += 1
       feature.save()
       Vote.objects.create(feature=feature, user=request.user)  
       return redirect(reverse('feature', args={feature_id}))

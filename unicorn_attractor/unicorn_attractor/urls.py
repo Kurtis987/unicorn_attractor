@@ -35,7 +35,7 @@ urlpatterns = [
     url(r'^post/edit/(?P<bug_id>\d+)/(?P<post_id>\d+)/$',forum_views.edit_post, name='edit_post'),
     url(r'^post/delete/(?P<bug_id>\d+)/(?P<post_id>\d+)/$', forum_views.delete_post, name='delete_post'),
     url(r'^bug/vote/(?P<bug_id>\d+)/(?P<subject_id>\d+)/$', forum_views.bug_vote, name='cast_vote'),
-    url(r'^feature_forum/$', feature_views.forum),
+    url(r'^feature_forum/$', feature_views.feature_forum, name='feature_forum'),
     url(r'^features/(?P<subject_id>\d+)/$', feature_views.features, name='features'),
     url(r'^new_feature/(?P<subject_id>\d+)/$',  feature_views.new_feature, name='new_feature'),
     url(r'^feature/(?P<feature_id>\d+)/$', feature_views.feature, name='feature'),

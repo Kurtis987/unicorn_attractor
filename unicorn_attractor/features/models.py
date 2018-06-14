@@ -5,7 +5,6 @@ from django.conf import settings
 from django.utils import timezone
  
 class Subject(models.Model):
- 
     name = models.CharField(max_length=255)
     description = HTMLField()
  
