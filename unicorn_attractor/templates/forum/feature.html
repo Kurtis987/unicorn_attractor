@@ -16,6 +16,7 @@
                  </th>
                  <th>OWNER</th>
                  <th>LAST POST</th>
+                 <th>STATUS</th>
              </tr>
              <tr>
                  <td>
@@ -25,14 +26,15 @@
                  </td>
                  <td>{{ feature.user.username }}</td>
                  <td>{% last_posted_user_name feature %}</td>
+                 <td>{{ feature.current_status }}</td>
              </tr>
            </tbody>
          </table>
-     </div> 
+     </div>
      <div class="container">
          <div class="col-md-6">
              <h2>Upvote</h2> 
- 
+                {{feature.paypal_form.sandbox}}
                  <div class="col-md-10"> 
                      <span class="pull-right">Votes: {{ feature.feature_votes_count }}</span>
                  </div>

@@ -13,11 +13,17 @@ class Subject(models.Model):
         return self.name
 
 class Bug(models.Model):
+    status = (
+        ('todo', 'todo'),
+        ('doing', 'doing'),
+        ('done', 'done'),
+    )
     name = models.CharField(max_length=255)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='bugs')
     subject = models.ForeignKey(Subject, related_name='bugs')
     created_at = models.DateTimeField(default=timezone.now)
     bug_votes = models.IntegerField(default=0)
+    current_status = models.CharField(max_length=5, choices=status, default='todo')
 
 
 class Post(models.Model):

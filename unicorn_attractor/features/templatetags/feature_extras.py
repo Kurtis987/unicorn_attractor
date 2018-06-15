@@ -28,14 +28,21 @@ def user_vote_button(feature, subject, user):
  
     if not vote:
         if user.is_authenticated():
+
             link = """
             <div class="col-md-3 btn-vote"> 
             <a href="%s" class="btn btn-default btn-sm">
-              Add my vote!
+              {{feature.paypal_form.sandbox}}
             </a>
             </div>""" % reverse('cast_feature_vote', kwargs={'feature_id' : feature.id, 'subject_id':feature.subject_id})
  
             return link
+ 
+    return ""
+
+@register.simple_tag
+def vote_tally(feature):
+    feature.feature_votes_count += 1
  
     return ""
 

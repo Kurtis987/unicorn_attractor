@@ -16,6 +16,7 @@
                  </th>
                  <th>OWNER</th>
                  <th>LAST POST</th>
+                 <th>STATUS</th>
              </tr>
              <tr>
                  <td>
@@ -25,6 +26,7 @@
                  </td>
                  <td>{{ bug.user.username }}</td>
                  <td>{% last_posted_user_name bug %}</td>
+                 <td>{{ bug.current_status }}</td>
              </tr>
            </tbody>
          </table>

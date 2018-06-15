@@ -32,8 +32,8 @@ nav li a:hover:after {
 	.bottom-heading{
 		margin-bottom: 131px;
 	}
-	form {
-		margin-left: 100px;
+	.content{
+		padding-left: 70px;
 	}
 	.navbar {
 		padding: 0;

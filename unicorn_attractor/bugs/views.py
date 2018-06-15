@@ -67,17 +67,6 @@ def save_bug(bug_form, post_form, subject, user):
     post.save()
     return bug
 
-'''
-def save_poll(poll_form, poll_subject_formset, bug):
-    poll = poll_form.save(commit=False)
-    poll.bug = bug
-    poll.save()
-
-    for subject_form in poll_subject_formset:
-        subject = subject_form.save(commit=False)
-        subject.poll = poll
-        subject.save()
-'''
 
 @login_required
 def new_post(request, bug_id):
@@ -156,20 +145,3 @@ def bug_vote(request, bug_id, subject_id):
       bug.save()
       Vote.objects.create(bug=bug, user=request.user)  
       return redirect(reverse('bug', args={bug_id}))
-
-'''
-    
-   subject = bug.poll.votes.filter(user=request.user)
- 
-   if subject:
-       messages.error(request, "You already voted on this! ... You’re not trying to cheat are you?")
-       return redirect(reverse('bug', args={bug_id}))
- 
-   subject = PollSubject.objects.get(id=subject_id)
- 
-   subject.votes.create(poll=subject.poll, user=request.user)
- 
-   messages.success(request, "We've registered your vote!")
- 
-   return redirect(reverse('bug', args={bug_id}))
-'''

@@ -22,6 +22,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '*(xq^f+784r3sk+olfov&b*i_zdnzkpfvu8$qlp!4p21pqu98d'
 
+
+SITE_URL = 'http://127.0.0.1:8000'
+PAYPAL_NOTIFY_URL = 'http://127.0.0.1/a-very-hard-to-guess-url/'
+PAYPAL_RECEIVER_EMAIL = 'Kurtis987-facilitator@gmail.com'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -44,7 +49,9 @@ INSTALLED_APPS = [
     'tinymce',
     'emoticons', 
     'bugs',
-    'features'
+    'features',
+    'paypal.standard.ipn',
+    'paypal_store'
 ]
 
 Internal_IPS = ('127.0.0.1',)
